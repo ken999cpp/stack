@@ -34,7 +34,10 @@ ForwardList& ForwardList::operator=(const ForwardList& other)
                 otherCurrent = otherCurrent -> next;
             }
         }
-        head = nullptr;
+        else
+        {
+            head = nullptr;
+        }
     }
     return *this;
 }
@@ -49,7 +52,7 @@ ForwardList& ForwardList::operator=(ForwardList&& other) noexcept
         return *this;
     }
     clear();
-    head = std::move(other.head);
+    head = other.head;
     other.head = nullptr;
     return *this;
 }
@@ -110,6 +113,10 @@ void ForwardList::pop_back()
     if (empty())
     {
         throw std::out_of_range("List is empty");
+    }
+    if (cycle_existence())
+    {
+        throw std::logic_error("Can't pop_back: cycle detected");
     }
     if (head -> next == nullptr)
     {
